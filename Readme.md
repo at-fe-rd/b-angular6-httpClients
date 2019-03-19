@@ -8,6 +8,8 @@
 ## Installation & Running
 
 ```
+$ npm install
+
 $ npm start
 ```
 - Check project at port `4100`
