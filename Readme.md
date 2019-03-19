@@ -10,12 +10,16 @@
 ```
 $ npm start
 ```
-Check project at port `4100`
+- Check project at port `4100`
+
 =========================
 
 ## DOCUMENT
 
-```
+This repository provide:
+- ApiService for all methods - work with `HttpClient`.
+- Auto setting headers for all requests with `interceptor`.
+
 =========================
 
 # License
