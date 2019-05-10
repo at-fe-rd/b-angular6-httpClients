@@ -1,15 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Http, Request, Headers, RequestOptions, RequestOptionsArgs, Response, RequestMethod } from '@angular/http';
+import { RequestOptionsArgs, Response, RequestMethod } from '@angular/http';
 import { throwError, Subject } from 'rxjs';
 import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/observable/throw';
-import 'rxjs/add/observable/forkJoin';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { takeUntil, map, catchError } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
-import { HttpClient, HttpResponse, HttpErrorResponse } from '@angular/common/http';
-import { query } from '@angular/animations';
-import { takeUntil } from 'rxjs/operators';
 
 const apiBaseUrl = `${environment.apiBaseUrl}/api`;
 
@@ -42,8 +37,9 @@ export const ENDPOINT = {
 
 @Injectable()
 export class ApiService {
+
   ngUnsubscribe: Subject<void> = new Subject<void>();
-  
+
   constructor(
     private http: HttpClient
   ) {}
@@ -57,8 +53,8 @@ export class ApiService {
    * @return {Observable<Response>}         Response data and/or error message
    */
   public get(uri: Array<any> | any, queryOptions?: Object): Observable<ArrayBuffer> {
-    let [url, queryParams] = this._constructRequest(uri, queryOptions);
-    let request = this.http.get(url, queryParams);
+    const [url, queryParams] = this._constructRequest(uri, queryOptions);
+    const request = this.http.get(url, queryParams);
     return this._connect(request);
   }
 
@@ -72,8 +68,8 @@ export class ApiService {
    * @return {Observable<Response>}         Response data and/or error message
    */
   public post(uri: Array<any> | any, body: any, queryOptions?: Object, fullRes = false): Observable<ArrayBuffer> {
-    let [url, queryParams] = this._constructRequest(uri, queryOptions, fullRes);
-    let request = this.http.post(url, body, queryParams);
+    const [url, queryParams] = this._constructRequest(uri, queryOptions, fullRes);
+    const request = this.http.post(url, body, queryParams);
     return this._connect(request);
   }
 
@@ -87,9 +83,9 @@ export class ApiService {
    * @return {Observable<Response>}         Response data and/or error message
    */
   public postFormData(uri: Array<any> | any, body: any, queryOptions?: Object): Observable<ArrayBuffer> {
-    let [url, queryParams] = this._constructRequest(uri, queryOptions);
-    let form = this._form(body);
-    let request = this.http.post(url, form).pipe(takeUntil(this.ngUnsubscribe));
+    const [url, queryParams] = this._constructRequest(uri, queryOptions);
+    const form = this._form(body);
+    const request = this.http.post(url, form).pipe(takeUntil(this.ngUnsubscribe));
     return this._connect(request);
   }
 
@@ -117,50 +113,52 @@ export class ApiService {
    * @return {Observable<Response>}         Response data and/or error message
    */
   public delete(uri: Array<any> | any, queryOptions?: Object): Observable<ArrayBuffer> {
-    let [url, queryParams] = this._constructRequest(uri, queryOptions);
-    let request = this.http.delete(url, queryParams);
+    const [url, queryParams] = this._constructRequest(uri, queryOptions);
+    const request = this.http.delete(url, queryParams);
     return this._connect(request);
   }
 
   private _constructRequest(uri: Array<any> | any, moreOptions?: Object | any, fullRes?: Boolean): any {
     const url = Array.prototype.concat(apiBaseUrl, uri).join(String.fromCharCode(47));
-    let paramsRequest = {};
+    const paramsRequest = {};
     if (moreOptions) {
       Object.keys(moreOptions).forEach(x => {
         paramsRequest[`${x}`] = `${moreOptions[x]}`;
       })
     }
-    return fullRes? [url, { params: paramsRequest, observe: 'response' }] : [url, { params: paramsRequest }];
+    return fullRes ? [url, { params: paramsRequest, observe: 'response' }] : [url, { params: paramsRequest }];
   }
 
   private _connect(request: any): Observable<ArrayBuffer> {
-    return request.map((res: Response) => {
+    return request.pipe(
+      map((res: Response) => {
         return res;
-      })
-      .catch((err: HttpErrorResponse) => {
+      }),
+      catchError((err: HttpErrorResponse) => {
         return this._handleError(err);
-      });
+      })
+    )
   }
 
   /**
    * Helper method for hook up Error handler helper
    * @method _handleError
-   * @param  {any}        err Error information from failed request
+   * @param {any} err : Error information from failed request
    */
   private _handleError(err: any) {
     let body: ErrorMsg;
-      // token changed
-      if (err.status === 401) {
-        // this.auth.logout();
-      }
-      body = {
-        status: err.status,
-        errors: err.error.errors,
-        success: err.error.success
-      }
-      // server error - API not responsed
-      // Always give back the error for subscriber.
-      return throwError(body);
+    // token changed
+    if (err.status === 401) {
+      // this.auth.logout();
+    }
+    body = {
+      status: err.status,
+      errors: err.error.errors,
+      success: err.error.success
+    };
+    // server error - API not responsed
+    // Always give back the error for subscriber.
+    return throwError(body);
   }
 
   private _form(data: any = {}): any {
@@ -168,10 +166,9 @@ export class ApiService {
 
     for (const param in data) {
       if (data.hasOwnProperty(param)) {
-        if(data[param] === 'image') {
+        if (data[param] === 'image') {
           form.append(param, data[param], 'thumb.jpg');
-        }
-        else {
+        } else {
           form.append(param, data[param]);
         }
       }

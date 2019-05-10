@@ -1,11 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Response } from '@angular/http';
 import { Subject } from 'rxjs/Subject';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/of';
 import { ApiService, VERSION, ENDPOINT } from '../api/api.service';
-import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class AuthService {
@@ -52,7 +48,7 @@ export class AuthService {
   }
 
   isAuthenticated() {
-    let token = localStorage.getItem('access-token');
+    const token = localStorage.getItem('access-token');
     let isAuthenticated: boolean;
     if (this.isTokenInvalid()) {
       localStorage.removeItem('access-token');
@@ -64,7 +60,7 @@ export class AuthService {
   }
 
   getUserInfo() {
-    let token = localStorage.getItem('access-token');
+    const token = localStorage.getItem('access-token');
     // let userInfo = this.jwtHelper.decodeToken(token);
     return  {};
     //   this.jwtHelper.decodeToken(token),
@@ -74,7 +70,7 @@ export class AuthService {
   }
 
   isTokenInvalid() {
-    let token = localStorage.getItem('access-token');
+    const token = localStorage.getItem('access-token');
     if (!token) {
       return true
     } else {
@@ -93,14 +89,14 @@ export class AuthService {
   }
 
   redirectToPrevStep() {
-    let route = this.referralRoute ? this.referralRoute : '/';
+    const route = this.referralRoute ? this.referralRoute : '/';
     this.router.navigateByUrl(route);
   }
 
   redirectToLogin(current: string = '/') {
     // Store current url as referral and use latter for login redirection
     this.setRoute(current);
-    window.scroll(0,0);
+    window.scroll(0, 0);
     this.router.navigate(['/auth/login']);
   }
 
