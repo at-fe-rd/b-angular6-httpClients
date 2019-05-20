@@ -15,36 +15,31 @@ export class ErrorHandler {
 
   public handleError(err: any) {
     if (err.status === 0) {
-      let dialogRef = this.dialog.open(DialogComponent, {});
+      const dialogRef = this.dialog.open(DialogComponent, {});
       dialogRef.componentInstance.type = 'msg_refresh_dlg';
-    }
-    else if (err.status === 401) {
+    } else if (err.status === 401) {
       if (!this.dialog.openDialogs.length) {
         this.auth.logout();
-        let dialogRef = this.dialog.open(DialogComponent, {});
+        const dialogRef = this.dialog.open(DialogComponent, {});
         dialogRef.componentInstance.type = 'msg_auth_dlg';
       }
-    }
-    else if (err.status === 404) {
+    } else if (err.status === 404) {
       if (!this.dialog.openDialogs.length) {
-        let dialogRef = this.dialog.open(DialogComponent, {});
+        const dialogRef = this.dialog.open(DialogComponent, {});
         dialogRef.componentInstance.type = 'msg_404_dlg';
       }
-    } 
-    else if (err.status === 403) {
+    } else if (err.status === 403) {
       if (!this.dialog.openDialogs.length) {
-        let dialogRef = this.dialog.open(DialogComponent, {
+        const dialogRef = this.dialog.open(DialogComponent, {
           data: err.error.errors
         });
         dialogRef.componentInstance.type = 'custom_msg_dlg';
       }
-    }
-    else if (err.status === 500) {
-      let dialogRef = this.dialog.open(DialogComponent, {});
+    } else if (err.status === 500) {
+      const dialogRef = this.dialog.open(DialogComponent, {});
       dialogRef.componentInstance.type = 'msg_refresh_dlg';
-    }
-    else if (err.status === 422 && this.router.url !== '/auth/login') {
-      let dialogRef = this.dialog.open(DialogComponent, {});
+    } else if (err.status === 422 && this.router.url !== '/auth/login') {
+      const dialogRef = this.dialog.open(DialogComponent, {});
       dialogRef.componentInstance.type = 'msg_sys_dlg';
     }
   }

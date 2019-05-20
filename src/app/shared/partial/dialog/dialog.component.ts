@@ -1,9 +1,5 @@
 import { Component, Input, OnInit, OnDestroy, Inject, forwardRef } from '@angular/core';
 import { Location } from '@angular/common';
-import { Warehouse } from 'ngx-warehouse';
-import { ApiService, ENDPOINT } from '../../service/api.service';
-import { environment } from '../../../../environments/environment';
-import { getCookie, setCookie } from '../../function/cookies';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 
 

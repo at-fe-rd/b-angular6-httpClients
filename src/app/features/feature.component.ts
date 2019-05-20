@@ -10,7 +10,7 @@ import { UsersService } from 'app/core/service/users/users.service';
 })
 
 export class FeatureComponent implements OnInit {
-  
+
   constructor(
     private userService: UsersService
   ) {}
