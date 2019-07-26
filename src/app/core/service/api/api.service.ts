@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { RequestOptionsArgs, Response, RequestMethod } from '@angular/http';
 import { throwError, Subject } from 'rxjs';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { takeUntil, map, catchError } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
