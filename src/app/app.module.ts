@@ -20,7 +20,7 @@ import { HomeRouteReuseStategy } from './features/home/home.reuse';
 import { ViewportScroller } from '@angular/common';
 import { first, timeout, map, filter } from 'rxjs/operators';
 import { ErrorHandler } from './core/service/api/error-handler';
-import { MatDialogModule } from '@angular/material';
+import { MatDialogModule } from '@angular/material/dialog';
 import { DeviceDetectorModule } from 'ngx-device-detector';
 
 export function createTranslateLoader(http: HttpClient) {

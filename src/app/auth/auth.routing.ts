@@ -10,7 +10,7 @@ export const authRoutes: Routes = [
     children: [
       {
         path: 'login',
-        loadChildren: 'app/auth/login/login.module#LoginModule'
+        loadChildren: () => import('./login/login.module').then(m => m.LoginModule)
       }
     ]
   }
